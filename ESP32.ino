@@ -8,6 +8,7 @@
 const char * ssid = "WIFI_SSID";
 const char * password = "WIFI_PASS";
 String apiKey = "ABCDEFGH12345678";
+String currency = "EUR_CZK";
 
 const char* host = "free.currconv.com";
 const int httpsPort = 443; //http port
@@ -50,7 +51,7 @@ void setup() {
   Serial.println("Ready");
   client.stop();
   if (client.connect(host, httpsPort)) {
-    String url = "/api/v7/convert?q=EUR_CZK&compact=ultra&apiKey="+apiKey;
+    String url = "/api/v7/convert?q="+currency+"&compact=ultra&apiKey="+apiKey;
     client.print(String("GET ") + url + " HTTP/1.0\r\n" + "Host: " + host + "\r\n" + "User-Agent: ESP32\r\n" + "Connection: close\r\n\r\n");
     while (client.connected()) {
       String line = client.readStringUntil('\n');
