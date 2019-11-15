@@ -1,11 +1,14 @@
-
-//Author: Bc. Martin Chlebovec
+//Author: Bc. Martin Chlebovec (martinius96)
+//E-mail: martinius96@gmail.com
 //Website: https://arduino.php5.sk?lang=en
 //PayPal: https://paypal.me/chlebovec
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
-const char * ssid = "WiFi_Meno";
-const char * password = "WiFi_Heslo";
+
+const char * ssid = "WIFI_SSID";
+const char * password = "WIFI_PASS";
+String apiKey = "ABCDEFGH12345678";
+
 const char* host = "free.currconv.com";
 const int httpsPort = 443; //http port
 WiFiClientSecure client;
@@ -47,15 +50,17 @@ void setup() {
   Serial.println("Ready");
   client.stop();
   if (client.connect(host, httpsPort)) {
-    String url = "/api/v7/convert?q=EUR_CZK&compact=ultra&apiKey=XXXXXXXX";
+    String url = "/api/v7/convert?q=EUR_CZK&compact=ultra&apiKey="+apiKey;
     client.print(String("GET ") + url + " HTTP/1.0\r\n" + "Host: " + host + "\r\n" + "User-Agent: ESP32\r\n" + "Connection: close\r\n\r\n");
     while (client.connected()) {
       String line = client.readStringUntil('\n');
+      Serial.println(line);
       if (line == "\r") {
         break;
       }
     }
     String line = client.readStringUntil('\n');
+    Serial.println(line);
     String abc = line.substring(11, 20);
     Serial.println("Kurz (orezany text): ");
     Serial.println(abc);
